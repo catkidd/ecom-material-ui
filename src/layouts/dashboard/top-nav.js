@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import BellIcon from '@heroicons/react/24/solid/BellIcon';
-import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
+// import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
+import ShoppingCartIcon from '@heroicons/react/24/solid/ShoppingCartIcon';
 import {
   Avatar,
   Badge,
@@ -78,11 +79,17 @@ export const TopNav = (props) => {
             direction="row"
             spacing={2}
           >
-            <Tooltip title="Contacts">
+            <Tooltip title="Your Choices!">
               <IconButton>
+                <Badge
+                  badgeContent={4}
+                  color="success"
+                  variant="dot"
+                >
                 <SvgIcon fontSize="small">
-                  <UsersIcon />
+                  <ShoppingCartIcon />
                 </SvgIcon>
+                </Badge>
               </IconButton>
             </Tooltip>
             <Tooltip title="Notifications">
@@ -106,7 +113,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src="/assets/avatars/avatar-anika-visser.png"
+              src="/assets/avatars/avatar-nasimiyu-danai.png"
             />
           </Stack>
         </Stack>
