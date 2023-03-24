@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { toastifyService } from 'src/services/toastify.service';
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -149,6 +150,7 @@ export const AuthProvider = (props) => {
       type: HANDLERS.SIGN_IN,
       payload: user
     });
+    toastifyService.success("Success");
   };
 
   const signUp = async (email, name, password) => {

@@ -1,67 +1,39 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Divider,
   TextField,
+  Textarea,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  },
-  {
-    value: 'los-angeles',
-    label: 'Los Angeles'
-  }
-];
+import React, { useRef } from 'react';
+import emailjs from '@emailjs/browser';
+import { emailconfig } from 'src/config/email.config';
+import { toastifyService } from 'src/services/toastify.service';
 
 export const AccountProfileDetails = () => {
-  const [values, setValues] = useState({
-    firstName: 'Anika',
-    lastName: 'Visser',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'los-angeles',
-    country: 'USA'
-  });
+  const form = useRef()
 
-  const handleChange = useCallback(
-    (event) => {
-      setValues((prevState) => ({
-        ...prevState,
-        [event.target.name]: event.target.value
-      }));
-    },
-    []
-  );
+  const sendEmail = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-    },
-    []
-  );
+    emailjs.sendForm(emailconfig.serviceId, emailconfig.templateId, form.current, emailconfig.publicKey)
+      .then((result) => {
+          toastifyService.success("Email sent Sucecessfully!!")
+          window.location.reload()
+      }, (error) => {
+          toastifyService.error("EMAIL NOT SEND!!")
+      });
+  };
 
   return (
     <form
-      autoComplete="off"
-      noValidate
-      onSubmit={handleSubmit}
+      ref = {form}
+      onSubmit={sendEmail}
     >
       <Card>
         <CardHeader
@@ -82,10 +54,7 @@ export const AccountProfileDetails = () => {
                   fullWidth
                   helperText="Please specify the first name"
                   label="First name"
-                  name="firstName"
-                  onChange={handleChange}
-                  required
-                  value={values.firstName}
+                  name="first_name"
                 />
               </Grid>
               <Grid
@@ -94,11 +63,9 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
+                  helperText="Please specify the last name"
                   label="Last name"
-                  name="lastName"
-                  onChange={handleChange}
-                  required
-                  value={values.lastName}
+                  name="last_name"
                 />
               </Grid>
               <Grid
@@ -107,11 +74,9 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
+                  helperText="Please specify the email address"
                   label="Email Address"
                   name="email"
-                  onChange={handleChange}
-                  required
-                  value={values.email}
                 />
               </Grid>
               <Grid
@@ -120,11 +85,22 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
+                  helperText="Please specify the phone number"
                   label="Phone Number"
                   name="phone"
-                  onChange={handleChange}
                   type="number"
-                  value={values.phone}
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                md={6}
+              >
+                <textarea
+                  fullWidth
+                  helperText="Please type your concern!"
+                  label="Write something"
+                  name="message"
+                  type="text"
                 />
               </Grid>
               <Grid
@@ -133,45 +109,24 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
+                  helperText="Please specify the country"
                   label="Country"
                   name="country"
-                  onChange={handleChange}
-                  required
-                  value={values.country}
                 />
               </Grid>
               <Grid
                 xs={12}
                 md={6}
               >
-                <TextField
-                  fullWidth
-                  label="Select State"
-                  name="state"
-                  onChange={handleChange}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                  value={values.state}
-                >
-                  {states.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
               </Grid>
             </Grid>
           </Box>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained">
+          <button className='btn btn-primary'>
             Save details
-          </Button>
+          </button>
         </CardActions>
       </Card>
     </form>
